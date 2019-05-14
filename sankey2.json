@@ -1,0 +1,33 @@
+{
+"nodes":[
+{"node":0,"name":"Monet X Change", "placement": "1", "season": "AS4"},
+{"node":1,"name":"Trinity The Tuck", "placement": "1", "season": "AS4"},
+{"node":2,"name":"Monique Heart", "placement": "3", "season": "AS4"},
+{"node":3,"name":"Naomi Smalls", "placement": "3", "season": "AS4"},
+{"node":4,"name":"Latrice Royale", "placement": "5", "season": "AS4"},
+{"node":5,"name":"Manilla Luzon", "placement": "6", "season": "AS4"},
+{"node":6,"name":"Valentina", "placement": "7", "season": "AS4"},
+{"node":7,"name":"Gia Gunn", "placement": "8", "season": "AS4"},
+{"node":8,"name":"Farrah Moan", "placement": "9", "season": "AS4"},
+{"node":9,"name":"Monet X Change", "placement": "6", "season": "10"},
+{"node":10,"name":"Trinity The Tuck", "placement": "3", "season": "9"},
+{"node":11,"name":"Monique Heart", "placement": "8", "season": "10"},
+{"node":12,"name":"Naomi Smalls", "placement": "3", "season": "8"},
+{"node":13,"name":"Latrice Royale", "placement": "4", "season": "4"},
+{"node":14,"name":"Manilla Luzon", "placement": "3", "season": "3"},
+{"node":15,"name":"Valentina", "placement": "7", "season": "9"},
+{"node":16,"name":"Gia Gunn", "placement": "10", "season": "6"},
+{"node":17,"name":"Farrah Moan", "placement": "8", "season": "9"}
+
+],
+"links":[
+{"source":0,"target":9,"value":2},
+{"source":1,"target":10,"value":2},
+{"source":2,"target":11,"value":2},
+{"source":3,"target":12,"value":2},
+{"source":4,"target":13,"value":2},
+{"source":5,"target":14,"value":2},
+{"source":6,"target":15,"value":2},
+{"source":7,"target":16,"value":2},
+{"source":8,"target":17,"value":4}
+]}
