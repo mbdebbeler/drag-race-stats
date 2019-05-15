@@ -10,6 +10,7 @@
 }
 
 .node text {
+  font-family: Arial;
   pointer-events: none;
   text-shadow: 0 1px 0 #fff;
 }
@@ -31,7 +32,7 @@
 <script src="sankey.js"></script>
 <script>
 
-var units = "Widgets";
+var units = "queens";
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
@@ -79,8 +80,8 @@ d3.json("sankey.json", function(error, graph) {
 // add the link titles
   link.append("title")
         .text(function(d) {
-    		return d.source.name + " → " +
-                d.target.name + "\n" + format(d.value); });
+    		return d.queen });
+
 
 // add in the nodes
   var node = svg.append("g").selectAll(".node")
@@ -117,7 +118,7 @@ d3.json("sankey.json", function(error, graph) {
       .attr("dy", ".35em")
       .attr("text-anchor", "end")
       .attr("transform", null)
-      .text(function(d) { return d.name + " " + d.placement; })
+      .text(function(d) { return d.name; })
     .filter(function(d) { return d.x < width / 2; })
       .attr("x", 6 + sankey.nodeWidth())
       .attr("text-anchor", "start");

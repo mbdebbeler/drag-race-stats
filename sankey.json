@@ -1,19 +1,23 @@
 {
 "nodes":[
-{"node":0,"name":"Latrice Royale", "placement": "1"},
-{"node":1,"name":"Manila Luzon", "placement": "2"},
-{"node":2,"name":"Gia Gunn", "placement": "3"},
-{"node":3,"name":"Jasmine Masters", "placement": "4"},
-{"node":4,"name":"Naomi Smalls", "placement": "5"},
-{"node":5,"name":"Trinity \"the Tuck\" Taylor", "placement": "6"}
+{"node":0,"name":"Original Season Runners-Up", "placement": "1"},
+{"node":1,"name":"Original Season Top Half", "placement": "2"},
+{"node":2,"name":"Original Season Bottom Half", "placement": "3"},
+
+{"node":3,"name":"AS4 Winners", "placement": "4"},
+{"node":4,"name":"AS4 Runners-Up", "placement": "5"},
+{"node":5,"name":"AS4 Top Half", "placement": "6"},
+{"node":6,"name":"AS4 Bottom Half", "placement": "6"}
 ],
 "links":[
-{"source":0,"target":2,"value":2},
-{"source":1,"target":2,"value":2},
-{"source":1,"target":3,"value":2},
-{"source":0,"target":4,"value":2},
-{"source":2,"target":3,"value":2},
-{"source":2,"target":4,"value":2},
-{"source":0,"target":4,"value":4},
-{"source":0,"target":5,"value":1}
+{"source":0,"target":3,"value":2,"queen":"Trinity The Tuck"},
+{"source":0,"target":4,"value":2,"queen":"Naomi Smalls"},
+{"source":0,"target":6,"value":2,"queen":"Manila Luzon"},
+{"source":1,"target":5,"value":2,"queen":"Latrice Royale"},
+{"source":1,"target":3,"value":2,"queen":"Monet X Change"},
+{"source":1,"target":5,"value":2,"queen":"Valentina"},
+{"source":2,"target":6,"value":2,"queen":"Farrah Moan"},
+{"source":2,"target":4,"value":2,"queen":"Monique Heart"},
+{"source":2,"target":6,"value":2,"queen":"Gia Gunn"},
+{"source":2,"target":6,"value":2,"queen":"Jasmine Masters"}
 ]}
