@@ -7,7 +7,6 @@
 .node text {
   font-family: 'Fjalla One', sans-serif;
   pointer-events: none;
-  /* text-shadow: 0 1px 0 #fff; */
 }
 
 .link {
@@ -18,4 +17,12 @@
 
 .link:hover {
   stroke-opacity: .5;
+}
+
+.pink {
+  background-color: pink;
+}
+
+body {
+  font-family: 'Fjalla One', sans-serif;
 }

@@ -2,7 +2,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>SANKEY with D3</title>
+  <title>RPDR AS4 in a Sankey</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Fjalla+One&display=swap" rel="stylesheet">
   <link href="stylesheet.css" rel="stylesheet" type="text/css">
@@ -10,11 +10,26 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="sankey.js"></script>
+  <script src="controller.js"></script>
+  <script src="dataFetcher.js"></script>
+  <script src="dataParser.js"></script>
+  <script src="D3View.js"></script>
 </head>
 
 <body>
 
+<h1>RuPaul's Drag Race All Stars 4 in a Sankey</h1>
+
+<span class="json-name-hider" data-json-name="models/foo.json"></span>
+
+<div id="option">
+    <input name="updateButton"
+           type="button"
+           value="Update"/>
+</div>
+
 <script>
+
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
     width = 1000 - margin.left - margin.right,
@@ -42,82 +57,6 @@ var sankey = d3.sankey()
 
 var path = sankey.link();
 
-// load the data
-d3.json("models/AS4.json", function(error, graph) {
-
-  sankey
-      .nodes(graph.nodes)
-      .links(graph.links)
-      .layout(32);
-
-// add in the links
-  var link = svg.append("g").selectAll(".link")
-      .data(graph.links)
-    .enter().append("path")
-      .attr("class", "link")
-      .attr("d", path)
-      .style("stroke-width", function(d) { return Math.max(1, d.dy); })
-      .sort(function(a, b) { return b.dy - a.dy; });
-
-// add the link titles
-  link.append("title")
-        .text(function(d) {
-        return d.queen });
-
-
-// add in the nodes
-  var node = svg.append("g").selectAll(".node")
-      .data(graph.nodes)
-    .enter().append("g")
-      .attr("class", "node")
-      .attr("transform", function(d) {
-      return "translate(" + d.x + "," + d.y + ")"; })
-      .call(d3.drag()
-        .subject(function(d) {
-          return d;
-        })
-        .on("start", function() {
-          this.parentNode.appendChild(this);
-        })
-        .on("drag", dragmove));
-
-// add the rectangles for the nodes
-  node.append("rect")
-      .attr("height", function(d) { return d.dy; })
-      .attr("width", sankey.nodeWidth())
-      .style("fill", function(d) {
-      return d.color = color(d.name.replace(/ .*/, "")); })
-      .style("stroke", function(d) {
-      return d3.rgb(d.color).darker(2); })
-    .append("title")
-      .text(function(d) {
-      return d.name + "\n" + format(d.value); });
-
-// add in the title for the nodes
-  node.append("text")
-      .attr("x", -6)
-      .attr("y", function(d) { return d.dy / 2; })
-      .attr("dy", ".35em")
-      .attr("text-anchor", "end")
-      .attr("transform", null)
-      .text(function(d) { return d.name; })
-    .filter(function(d) { return d.x < width / 2; })
-      .attr("x", 6 + sankey.nodeWidth())
-      .attr("text-anchor", "start");
-
-// the function for moving the nodes
-  function dragmove(d) {
-    d3.select(this)
-      .attr("transform",
-            "translate("
-               + d.x + ","
-               + (d.y = Math.max(
-                  0, Math.min(height - d.dy, d3.event.y))
-                 ) + ")");
-    sankey.relayout();
-    link.attr("d", path);
-  }
-});
 </script>
 
 </body>
