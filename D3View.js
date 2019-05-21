@@ -1,12 +1,11 @@
 function D3View() {
 }
 
-D3View.prototype.bindEvents = function() {
-  $('input').click(this.updateJSON.bind(this));
-}
+// D3View.prototype.bindEvents = function() {
+//   $('input').click(this.updateJSON(json).bind(this));
+// }
 
 D3View.prototype.drawSankey = function(graph) {
-  console.log("drawSankey clicked!")
   sankey
       .nodes(graph.nodes)
       .links(graph.links)
@@ -83,7 +82,6 @@ D3View.prototype.drawSankey = function(graph) {
 }
 
 D3View.prototype.clearSankey = function() {
-  console.log("clearSankey clicked!");
   var elements = d3.selectAll("g > *")
   elements.remove();
   // d3.path.exit().remove().
@@ -92,7 +90,6 @@ D3View.prototype.clearSankey = function() {
 
 
 D3View.prototype.updateJSON = function(json) {
-  console.log("UpdateJSON clicked!");
   this.clearSankey();
   this.drawSankey(json);
 }

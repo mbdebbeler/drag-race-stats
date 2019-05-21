@@ -4,7 +4,9 @@ $(document).ready(function(){
   var view = new D3View();
   var controller = new Controller(fetcher, parser, view);
   controller.bindEvents();
-  controller.drawGraph('models/AS4.json')
+  controller.fetcher.fetch('models/AS4.json', function(json) {
+    view.drawSankey(json)
+  })
 })
 
 function Controller(fetcher, parser, view) {
@@ -24,7 +26,7 @@ Controller.prototype.workingJSplease = function() {
 
 Controller.prototype.changeGraph = function() {
   // TODO: read input to figure out filename
-  var filename = "models/foo.json"
+  var filename = "rawAPIpulls/getAllSeasons.json"
   this.drawGraph(filename)
 }
 
