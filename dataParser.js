@@ -2,12 +2,13 @@ function DataParser() {
 
 }
 
-DataParser.prototype.parse = function(data) {
+DataParser.prototype.parse = function(data, seasonNumber) {
   var allStarsSeasons = this.seasonSeparator(data)[0]
   var regularSeasons = this.seasonSeparator(data)[1]
   var allStarsCompetitors = this.allStarsPlacementLookup(allStarsSeasons)
   var allStarsInRegSeason = this.regularPlaceLookup(allStarsCompetitors, regularSeasons)
-  var links = this.linkBuilder(allStarsCompetitors)
+  var selectedCompetitors = this.seasonSelector(allStarsCompetitors, seasonNumber)
+  var links = this.linkBuilder(selectedCompetitors)
   var formattedJSON = this.nodeToLinkMerger(links)
   return formattedJSON
 }
@@ -86,6 +87,23 @@ DataParser.prototype.mergeQueens = function(regQueens, aSQueens) {
   }
 
   var allStars = arrayUnion(regQueens, aSQueens, areQueensEqual);
+}
+
+DataParser.prototype.seasonSelector = function(allStars, seasonNumber) {
+  console.log("it's passing through!")
+  var selectedQueens = []
+  var unselectedQueens = []
+  for (var i = 0; i < allStars.length; i++) {
+    var queen = allStars[i]
+    if (queen.allStarsSeasonNumber == seasonNumber) {
+      selectedQueens.push(queen)
+    } else {
+      unselectedQueens.push(queen)
+    }
+  }
+  console.log(selectedQueens)
+  console.log(unselectedQueens)
+  return allStars
 }
 
 DataParser.prototype.linkBuilder = function(allStars) {

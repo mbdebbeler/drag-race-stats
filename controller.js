@@ -32,7 +32,8 @@ Controller.prototype.changeGraph = function() {
 
 Controller.prototype.drawGraph = function(filename) {
   this.fetcher.fetch(filename, function(json) {
-    var parsedJSON = this.parser.parse(json)
+    var seasonNumber = 'A4'
+    var parsedJSON = this.parser.parse(json, seasonNumber)
     this.view.updateJSON(parsedJSON)
   }.bind(this))
 }
