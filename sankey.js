@@ -83,12 +83,22 @@ d3.sankey = function() {
       node.sourceLinks = [];
       node.targetLinks = [];
     });
-    debugger
     links.forEach(function(link) {
       var source = link.source,
           target = link.target;
-      if (typeof source === "number") source = link.source = nodes[link.source];
-      if (typeof target === "number") target = link.target = nodes[link.target];
+      if (typeof source === "number") {
+        source = link.source = nodes[link.source]
+      };
+      if (typeof target === "number") {
+        // for (i = 0; i < nodes.length; i++) {
+        //   debugger
+        //   var node = nodes[i]
+        //   if node.node == target
+        //   target = link.target = node
+        // }
+        // if nodes[link.target].node == link.target
+        target = link.target = nodes[link.target]
+      };
       source.sourceLinks.push(link);
       target.targetLinks.push(link);
     });
