@@ -38,14 +38,17 @@ D3View.prototype.drawSankey = function(graph) {
         })
         .on("drag", dragmove));
 
+  var myColor = d3.scaleLinear()
+    .domain([1,10])
+    .range(["pink", "blue"])
 // add the rectangles for the nodes
   node.append("rect")
       .attr("height", function(d) { return d.dy; })
       .attr("width", sankey.nodeWidth())
       .style("fill", function(d) {
-      return d.color = color(d.name.replace(/ .*/, "")); })
+      return d.color = color(d.name); })
       .style("stroke", function(d) {
-      return d3.rgb(d.color).darker(2); })
+      return d3.rgb(d.color).darker(5); })
     .append("title")
       .text(function(d) {
       return d.name + "\n" + format(d.value); });
