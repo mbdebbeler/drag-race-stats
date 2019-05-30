@@ -37,6 +37,7 @@ Controller.prototype.changeGraph = function(selectedGroup) {
 Controller.prototype.drawGraph = function(filename, selectedGroup) {
   this.fetcher.fetch(filename, function(json) {
     var parsedJSON = this.parser.parse(json, selectedGroup)
+    debugger
     this.view.updateJSON(parsedJSON)
   }.bind(this))
 }

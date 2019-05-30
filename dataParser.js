@@ -134,17 +134,39 @@ DataParser.prototype.linkBuilder = function(allStars) {
 }
 
 DataParser.prototype.nodeToLinkMerger = function(links) {
+  var nodes = []
+  var target = []
+  for (var i = 0; i < links.length; i++) {
+    var link = links[i]
+    nodes.push(link.source)
+    nodes.push(link.target)
+  }
+  var uniqueNodes = Array.from(new Set(nodes))
+  var possibleNodes = [
+    {"node":0,"name":"Original Season Winner"},
+    {"node":1,"name":"Original Season Runner-Up"},
+    {"node":2,"name":"Original Season Top Half"},
+    {"node":3,"name":"Original Season Bottom Half"},
+    {"node":4,"name":"AS Winner"},
+    {"node":5,"name":"AS Runner-Up"},
+    {"node":6,"name":"AS Top Half"},
+    {"node":7,"name":"AS Bottom Half"},
+  ]
+  for (var i = 0; i < possibleNodes.length; i++) {
+    var node = possibleNodes[i]
+    if (uniqueNodes.includes(node.node)) {
+    } else {
+      possibleNodes.splice(i, 1)
+    }
+  }
+  // NOTE: tried to rename the nodes to the indices here but it's still directing the target of Tatianna's link to node 6, which doesn't exist.
+  // for (var i = 0; i < possibleNodes.length; i++) {
+  //   var node = possibleNodes[i]
+  //   node.node = i
+  // }
+
   var formattedJSON = {
-    "nodes":[
-      {"node":0,"name":"Original Season Winner"},
-      {"node":1,"name":"Original Season Runner-Up"},
-      {"node":2,"name":"Original Season Top Half"},
-      {"node":3,"name":"Original Season Bottom Half"},
-      {"node":4,"name":"AS Winner"},
-      {"node":5,"name":"AS Runner-Up"},
-      {"node":6,"name":"AS Top Half"},
-      {"node":7,"name":"AS Bottom Half"},
-    ],
+    "nodes":possibleNodes,
     "links":links
   }
   return formattedJSON
