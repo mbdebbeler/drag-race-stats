@@ -8,8 +8,8 @@ DataParser.prototype.parse = function(data, seasonNumber) {
   var allStarsCompetitors = this.allStarsPlacementLookup(allStarsSeasons)
   var allStarsInRegSeason = this.regularPlaceLookup(allStarsCompetitors, regularSeasons)
   var selectedCompetitors = this.seasonSelector(allStarsCompetitors, seasonNumber)
-  var links = this.linkBuilder(selectedCompetitors)
-  var formattedJSON = this.nodeToLinkMerger(links)
+  var links = this.linkBuilder(selectedCompetitors, seasonNumber)
+  var formattedJSON = this.nodeToLinkMerger(links, seasonNumber)
   return formattedJSON
 }
 
@@ -105,7 +105,7 @@ DataParser.prototype.seasonSelector = function(allStars, seasonNumber) {
   return selectedQueens
 }
 
-DataParser.prototype.linkBuilder = function(allStars) {
+DataParser.prototype.linkBuilder = function(allStars, seasonNumber) {
   var links = []
   for (var i = 0; i < allStars.length; i++) {
     var queen = allStars[i]
@@ -130,10 +130,45 @@ DataParser.prototype.linkBuilder = function(allStars) {
     var newLink = {"source":source, "target":target, "value":2, "queen":queen.name }
     links.push(newLink)
   }
+  var a1Nodes = [
+    {"node":1,"name":"Original Season Runner-Up"},
+    {"node":2,"name":"Original Season Top Half"},
+    {"node":3,"name":"Original Season Bottom Half"},
+    {"node":4,"name":"AS Winner"},
+    {"node":5,"name":"AS Runner-Up"},
+    {"node":6,"name":"AS Top Half"},
+    {"node":7,"name":"AS Bottom Half"},
+  ]
+  var a2Nodes = [
+    {"node":1,"name":"Original Season Runner-Up"},
+    {"node":2,"name":"Original Season Top Half"},
+    {"node":4,"name":"AS Winner"},
+    {"node":5,"name":"AS Runner-Up"},
+    {"node":6,"name":"AS Top Half"},
+    {"node":7,"name":"AS Bottom Half"},
+  ]
+  if (seasonNumber == "A1") {
+    for (var i = 0; i < a1nodes.length; i++) {
+      var a1node = a1nodes[i]
+      for (var j = 0; j < links.length; j++) {
+        if a1node.node == link.target
+        link.target = i
+      }
+    }
+  } else if (seasonNumber == "A2") {
+    for (var i = 0; i < a2nodes.length; i++) {
+      var a2node = a2nodes[i]
+      for (var j = 0; j < links.length; j++) {
+        if a2node.node == link.target
+        link.target = i
+      }
+    }
+  }
+  debugger
   return links
 }
 
-DataParser.prototype.nodeToLinkMerger = function(links) {
+DataParser.prototype.nodeToLinkMerger = function(links, seasonNumber) {
   // var nodes = []
   // var target = []
   // for (var i = 0; i < links.length; i++) {
@@ -142,6 +177,23 @@ DataParser.prototype.nodeToLinkMerger = function(links) {
   //   nodes.push(link.target)
   // }
   // var uniqueNodes = Array.from(new Set(nodes))
+  var a2Nodes = [
+    {"node":1,"name":"Original Season Runner-Up"},
+    {"node":2,"name":"Original Season Top Half"},
+    {"node":4,"name":"AS Winner"},
+    {"node":5,"name":"AS Runner-Up"},
+    {"node":6,"name":"AS Top Half"},
+    {"node":7,"name":"AS Bottom Half"},
+  ]
+  var a1Nodes = [
+    {"node":1,"name":"Original Season Runner-Up"},
+    {"node":2,"name":"Original Season Top Half"},
+    {"node":3,"name":"Original Season Bottom Half"},
+    {"node":4,"name":"AS Winner"},
+    {"node":5,"name":"AS Runner-Up"},
+    {"node":6,"name":"AS Top Half"},
+    {"node":7,"name":"AS Bottom Half"},
+  ]
   var possibleNodes = [
     {"node":0,"name":"Original Season Winner"},
     {"node":1,"name":"Original Season Runner-Up"},
