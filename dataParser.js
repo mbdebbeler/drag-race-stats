@@ -1,6 +1,5 @@
 function DataParser() {
 
-
 }
 
 DataParser.prototype.parse = function(data) {
@@ -31,8 +30,9 @@ DataParser.prototype.allStarsPlacementLookup = function(allStarsSeasons) {
   var allStarsCompetitors = []
   for (i = 0; i < allStarsSeasons.length; i++) {
     for (j = 0; j < allStarsSeasons[i].queens.length; j++) {
+      allStarsSeasons[i]["queens"][j].allStarsSeasonNumber = allStarsSeasons[i].seasonNumber
       allStarsCompetitors.push(allStarsSeasons[i]["queens"][j])
-    }
+      }
   }
   for (i = 0; i < allStarsCompetitors.length; i++) {
     var queen = allStarsCompetitors[i];
