@@ -33,7 +33,7 @@ DataParser.prototype.allStarsPlacementLookup = function(allStarsSeasons) {
     for (j = 0; j < allStarsSeasons[i].queens.length; j++) {
       allStarsSeasons[i]["queens"][j].allStarsSeasonNumber = allStarsSeasons[i].seasonNumber
       allStarsCompetitors.push(allStarsSeasons[i]["queens"][j])
-      }
+    }
   }
   for (i = 0; i < allStarsCompetitors.length; i++) {
     var queen = allStarsCompetitors[i];
@@ -50,15 +50,15 @@ DataParser.prototype.regularPlaceLookup = function(allStarsCompetitors, regularS
     var queenID = allStarsCompetitors[i].id
     for (j = 0; j < regularSeasons.length; j++) {
       var seasonNumber = regularSeasons[j].seasonNumber
-      var foundQueens = regularSeasons[j].queens.filter(function(queen){
+      var foundQueens = regularSeasons[j].queens.filter(function(queen) {
         queen.regularPlace = queen.place
         queen.seasonNumber = seasonNumber
         return queen.id == queenID
       })
       if (foundQueens != []) {
         for (k = 0; k < foundQueens.length; k++) {
-        allStarsInRegSeason.push(foundQueens[k])
-        queen.regularPlace = foundQueens[k].regularPlace
+          allStarsInRegSeason.push(foundQueens[k])
+          queen.regularPlace = foundQueens[k].regularPlace
         }
       }
     }
@@ -68,22 +68,22 @@ DataParser.prototype.regularPlaceLookup = function(allStarsCompetitors, regularS
 
 DataParser.prototype.mergeQueens = function(regQueens, aSQueens) {
   function arrayUnion(arr1, arr2, equalityFunc) {
-      var union = arr1.concat(arr2);
+    var union = arr1.concat(arr2);
 
-      for (var i = 0; i < union.length; i++) {
-          for (var j = i+1; j < union.length; j++) {
-              if (equalityFunc(union[i], union[j])) {
-                  union.splice(j, 1);
-                  j--;
-              }
-          }
+    for (var i = 0; i < union.length; i++) {
+      for (var j = i + 1; j < union.length; j++) {
+        if (equalityFunc(union[i], union[j])) {
+          union.splice(j, 1);
+          j--;
+        }
       }
+    }
 
-      return union;
+    return union;
   }
 
   function areQueensEqual(g1, g2) {
-      return g1.id === g2.id;
+    return g1.id === g2.id;
   }
 
   var allStars = arrayUnion(regQueens, aSQueens, areQueensEqual);
@@ -127,98 +127,193 @@ DataParser.prototype.linkBuilder = function(allStars, seasonNumber) {
     } else {
       var source = 2
     }
-    var newLink = {"source":source, "target":target, "value":2, "queen":queen.name }
+    var newLink = {
+      "source": source,
+      "target": target,
+      "value": 2,
+      "queen": queen.name
+    }
     links.push(newLink)
   }
-  var a1Nodes = [
-    {"node":1,"name":"Original Season Runner-Up"},
-    {"node":2,"name":"Original Season Top Half"},
-    {"node":3,"name":"Original Season Bottom Half"},
-    {"node":4,"name":"AS Winner"},
-    {"node":5,"name":"AS Runner-Up"},
-    {"node":6,"name":"AS Top Half"},
-    {"node":7,"name":"AS Bottom Half"},
+  var a1Nodes = [{
+      "node": 1,
+      "name": "Original Season Runner-Up"
+    },
+    {
+      "node": 2,
+      "name": "Original Season Top Half"
+    },
+    {
+      "node": 3,
+      "name": "Original Season Bottom Half"
+    },
+    {
+      "node": 4,
+      "name": "AS Winner"
+    },
+    {
+      "node": 5,
+      "name": "AS Runner-Up"
+    },
+    {
+      "node": 6,
+      "name": "AS Top Half"
+    },
+    {
+      "node": 7,
+      "name": "AS Bottom Half"
+    },
   ]
-  var a2Nodes = [
-    {"node":1,"name":"Original Season Runner-Up"},
-    {"node":2,"name":"Original Season Top Half"},
-    {"node":4,"name":"AS Winner"},
-    {"node":5,"name":"AS Runner-Up"},
-    {"node":6,"name":"AS Top Half"},
-    {"node":7,"name":"AS Bottom Half"},
+  var a2Nodes = [{
+      "node": 1,
+      "name": "Original Season Runner-Up"
+    },
+    {
+      "node": 2,
+      "name": "Original Season Top Half"
+    },
+    {
+      "node": 4,
+      "name": "AS Winner"
+    },
+    {
+      "node": 5,
+      "name": "AS Runner-Up"
+    },
+    {
+      "node": 6,
+      "name": "AS Top Half"
+    },
+    {
+      "node": 7,
+      "name": "AS Bottom Half"
+    },
   ]
   if (seasonNumber == "A1") {
-    for (var i = 0; i < a1nodes.length; i++) {
-      var a1node = a1nodes[i]
+    for (var i = 0; i < a1Nodes.length; i++) {
+      var a1Node = a1Nodes[i]
       for (var j = 0; j < links.length; j++) {
-        if a1node.node == link.target
-        link.target = i
+        var link = links[j]
+        if (a1Node.node == link.target) link.target = i;
+        if (a1Node.node == link.source) link.source = i;
       }
     }
   } else if (seasonNumber == "A2") {
-    for (var i = 0; i < a2nodes.length; i++) {
-      var a2node = a2nodes[i]
+    for (var i = 0; i < a2Nodes.length; i++) {
+      var a2Node = a2Nodes[i]
       for (var j = 0; j < links.length; j++) {
-        if a2node.node == link.target
-        link.target = i
+        var link = links[j]
+        if (a2Node.node == link.target) link.target = i;
+        if (a2Node.node == link.source) link.source = i;
       }
     }
   }
-  debugger
   return links
 }
 
 DataParser.prototype.nodeToLinkMerger = function(links, seasonNumber) {
-  // var nodes = []
-  // var target = []
-  // for (var i = 0; i < links.length; i++) {
-  //   var link = links[i]
-  //   nodes.push(link.source)
-  //   nodes.push(link.target)
-  // }
-  // var uniqueNodes = Array.from(new Set(nodes))
-  var a2Nodes = [
-    {"node":1,"name":"Original Season Runner-Up"},
-    {"node":2,"name":"Original Season Top Half"},
-    {"node":4,"name":"AS Winner"},
-    {"node":5,"name":"AS Runner-Up"},
-    {"node":6,"name":"AS Top Half"},
-    {"node":7,"name":"AS Bottom Half"},
+  var a1Nodes = [{
+      "node": 1,
+      "name": "Original Season Runner-Up"
+    },
+    {
+      "node": 2,
+      "name": "Original Season Top Half"
+    },
+    {
+      "node": 3,
+      "name": "Original Season Bottom Half"
+    },
+    {
+      "node": 4,
+      "name": "AS Winner"
+    },
+    {
+      "node": 5,
+      "name": "AS Runner-Up"
+    },
+    {
+      "node": 6,
+      "name": "AS Top Half"
+    },
+    {
+      "node": 7,
+      "name": "AS Bottom Half"
+    },
   ]
-  var a1Nodes = [
-    {"node":1,"name":"Original Season Runner-Up"},
-    {"node":2,"name":"Original Season Top Half"},
-    {"node":3,"name":"Original Season Bottom Half"},
-    {"node":4,"name":"AS Winner"},
-    {"node":5,"name":"AS Runner-Up"},
-    {"node":6,"name":"AS Top Half"},
-    {"node":7,"name":"AS Bottom Half"},
+  var a2Nodes = [{
+      "node": 1,
+      "name": "Original Season Runner-Up"
+    },
+    {
+      "node": 2,
+      "name": "Original Season Top Half"
+    },
+    {
+      "node": 4,
+      "name": "AS Winner"
+    },
+    {
+      "node": 5,
+      "name": "AS Runner-Up"
+    },
+    {
+      "node": 6,
+      "name": "AS Top Half"
+    },
+    {
+      "node": 7,
+      "name": "AS Bottom Half"
+    },
   ]
-  var possibleNodes = [
-    {"node":0,"name":"Original Season Winner"},
-    {"node":1,"name":"Original Season Runner-Up"},
-    {"node":2,"name":"Original Season Top Half"},
-    {"node":3,"name":"Original Season Bottom Half"},
-    {"node":4,"name":"AS Winner"},
-    {"node":5,"name":"AS Runner-Up"},
-    {"node":6,"name":"AS Top Half"},
-    {"node":7,"name":"AS Bottom Half"},
+  var possibleNodes = [{
+      "node": 0,
+      "name": "Original Season Winner"
+    },
+    {
+      "node": 1,
+      "name": "Original Season Runner-Up"
+    },
+    {
+      "node": 2,
+      "name": "Original Season Top Half"
+    },
+    {
+      "node": 3,
+      "name": "Original Season Bottom Half"
+    },
+    {
+      "node": 4,
+      "name": "AS Winner"
+    },
+    {
+      "node": 5,
+      "name": "AS Runner-Up"
+    },
+    {
+      "node": 6,
+      "name": "AS Top Half"
+    },
+    {
+      "node": 7,
+      "name": "AS Bottom Half"
+    },
   ]
-  // for (var i = 0; i < possibleNodes.length; i++) {
-  //   var node = possibleNodes[i]
-  //   if (uniqueNodes.includes(node.node)) {
-  //   } else {
-  //     possibleNodes.splice(i, 1)
-  //   }
-  // }
-  // NOTE: tried to rename the nodes to the indices here but it's still directing the target of Tatianna's link to node 6, which doesn't exist.
-  // for (var i = 0; i < possibleNodes.length; i++) {
-  //   var node = possibleNodes[i]
-  //   node.node = i
-  // }
-  var formattedJSON = {
-    "nodes":possibleNodes,
-    "links":links
+  if (seasonNumber == "A1") {
+    var formattedJSON = {
+      "nodes": a1Nodes,
+      "links": links
+    }
+  } else if (seasonNumber == "A2") {
+    var formattedJSON = {
+      "nodes": a2Nodes,
+      "links": links
+    }
+  } else {
+    var formattedJSON = {
+      "nodes": possibleNodes,
+      "links": links
+    }
   }
   return formattedJSON
 }

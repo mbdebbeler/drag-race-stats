@@ -1,9 +1,6 @@
 function D3View() {
-}
 
-// D3View.prototype.bindEvents = function() {
-//   $('input').click(this.updateJSON(json).bind(this));
-// }
+}
 
 D3View.prototype.drawSankey = function(graph) {
   sankey
@@ -24,7 +21,6 @@ D3View.prototype.drawSankey = function(graph) {
   link.append("title")
         .text(function(d) {
         return d.queen });
-
 
 // add in the nodes
   var node = svg.append("g").selectAll(".node")
@@ -84,10 +80,7 @@ D3View.prototype.drawSankey = function(graph) {
 D3View.prototype.clearSankey = function() {
   var elements = d3.selectAll("g > *")
   elements.remove();
-  // d3.path.exit().remove().
-  // d3.sankey.remove();
 }
-
 
 D3View.prototype.updateJSON = function(json) {
   this.clearSankey();
