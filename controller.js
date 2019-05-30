@@ -16,24 +16,27 @@ function Controller(fetcher, parser, view) {
 }
 
 Controller.prototype.bindEvents = function() {
-  $('h1').click(this.workingJSplease.bind(this));
-  $('input').click(this.changeGraph.bind(this));
+  $('input').click(function() {
+    var index = document.getElementById('selectedGroup').selectedIndex
+    var selectedGroup = document.getElementById('selectedGroup').getElementsByTagName('option')[index].value
+    this.changeGraph(selectedGroup)
+  }.bind(this));
 }
 
-Controller.prototype.workingJSplease = function() {
-  $('h1').addClass('pink')
+Controller.prototype.changeGraph = function(selectedGroup) {
+  if (selectedGroup == "A4") {
+    this.fetcher.fetch('models/AS4.json', function(json) {
+      this.view.updateJSON(json)
+    }.bind(this));
+  } else {
+    var filename = "rawAPIpulls/getAllSeasons.json"
+    this.drawGraph(filename, selectedGroup)
+  }
 }
 
-Controller.prototype.changeGraph = function() {
-  // TODO: read input to figure out filename
-  var filename = "rawAPIpulls/getAllSeasons.json"
-  this.drawGraph(filename)
-}
-
-Controller.prototype.drawGraph = function(filename) {
+Controller.prototype.drawGraph = function(filename, selectedGroup) {
   this.fetcher.fetch(filename, function(json) {
-    var seasonNumber = 'A4'
-    var parsedJSON = this.parser.parse(json, seasonNumber)
+    var parsedJSON = this.parser.parse(json, selectedGroup)
     this.view.updateJSON(parsedJSON)
   }.bind(this))
 }

@@ -90,20 +90,19 @@ DataParser.prototype.mergeQueens = function(regQueens, aSQueens) {
 }
 
 DataParser.prototype.seasonSelector = function(allStars, seasonNumber) {
-  console.log("it's passing through!")
   var selectedQueens = []
   var unselectedQueens = []
   for (var i = 0; i < allStars.length; i++) {
     var queen = allStars[i]
-    if (queen.allStarsSeasonNumber == seasonNumber) {
+    if (seasonNumber == "AA") {
+      selectedQueens.push(queen)
+    } else if (queen.allStarsSeasonNumber == seasonNumber) {
       selectedQueens.push(queen)
     } else {
       unselectedQueens.push(queen)
     }
   }
-  console.log(selectedQueens)
-  console.log(unselectedQueens)
-  return allStars
+  return selectedQueens
 }
 
 DataParser.prototype.linkBuilder = function(allStars) {
