@@ -8,8 +8,10 @@ DataParser.prototype.parse = function(data, seasonNumber) {
   var allStarsCompetitors = this.allStarsPlacementLookup(allStarsSeasons)
   var allStarsInRegSeason = this.regularPlaceLookup(allStarsCompetitors, regularSeasons)
   var selectedCompetitors = this.seasonSelector(allStarsCompetitors, seasonNumber)
-  var links = this.linkBuilder(selectedCompetitors)
-  var formattedJSON = this.nodeToLinkMerger(links)
+  var queensInBuckets = this.bucketBuilder(selectedCompetitors)
+  var nodes = this.nodeBuilder(queensInBuckets)
+  var links = this.linkBuilder(queensInBuckets, nodes)
+  var formattedJSON = this.nodeToLinkMerger(links, nodes)
   return formattedJSON
 }
 
@@ -105,67 +107,81 @@ DataParser.prototype.seasonSelector = function(allStars, seasonNumber) {
   return selectedQueens
 }
 
-DataParser.prototype.linkBuilder = function(allStars) {
-  var links = []
+DataParser.prototype.bucketBuilder = function(allStars) {
   for (var i = 0; i < allStars.length; i++) {
     var queen = allStars[i]
     if (queen.allStarsPlace == 1) {
-      var target = 4
+      queen.allStarsPlaceBucket = "AS Winner"
     } else if (queen.allStarsPlace <= 4) {
-      var target = 5
+      queen.allStarsPlaceBucket = "AS Runner-Up"
     } else if (queen.allStarsPlace > 7) {
-      var target = 7
+      queen.allStarsPlaceBucket = "AS Bottom Half"
     } else {
-      var target = 6
+      queen.allStarsPlaceBucket = "AS Top Half"
     }
     if (queen.regularPlace == 1) {
-      var source = 0
+      queen.regularPlaceBucket = "Original Season Winner"
     } else if (queen.regularPlace <= 4) {
-      var source = 1
+      queen.regularPlaceBucket = "Original Season Runner-Up"
     } else if (queen.regularPlace > 7) {
-      var source = 3
+      queen.regularPlaceBucket = "Original Season Bottom Half"
     } else {
-      var source = 2
+      queen.regularPlaceBucket = "Original Season Top Half"
     }
-    var newLink = {"source":source, "target":target, "value":2, "queen":queen.name }
+  }
+  return allStars
+}
+
+DataParser.prototype.nodeBuilder = function(allStars) {
+  var buckets = []
+  var nodes = []
+  for (var i = 0; i < allStars.length; i++) {
+    var queen = allStars[i]
+    buckets.push(queen.regularPlaceBucket)
+    buckets.push(queen.allStarsPlaceBucket)
+  }
+  var uniqueBuckets = Array.from(new Set(buckets))
+  for (var i = 0; i < uniqueBuckets.length; i++) {
+    var node = uniqueBuckets[i]
+    nodes.push({"name": node})
+  }
+  debugger
+  return nodes
+}
+
+DataParser.prototype.linkBuilder = function(allStars, nodes) {
+  var links = []
+  console.log("entering the loop")
+
+  for (var i = 0; i < allStars.length; i++) {
+    var queen = allStars[i]
+    console.log("on queen " + queen.name)
+    for (var j = 0; j < nodes.length; j++) {
+      var node = nodes[j]
+      var bucketName = node.name
+      if (queen.regularPlaceBucket === bucketName) {
+        queen.source = j
+      } else if (queen.allStarsPlaceBucket ===  bucketName) {
+        queen.target = j
+      }
+    }
+    var newLink = {
+      "source":queen.source,
+      "target":queen.target,
+      "value":2,
+      "queen":queen.name,
+      "originalSeasonPlace":queen.regularPlace,
+      "allStarsPlace":queen.allStarsPlace
+    }
     links.push(newLink)
   }
   return links
 }
 
-DataParser.prototype.nodeToLinkMerger = function(links) {
-  // var nodes = []
-  // var target = []
-  // for (var i = 0; i < links.length; i++) {
-  //   var link = links[i]
-  //   nodes.push(link.source)
-  //   nodes.push(link.target)
-  // }
-  // var uniqueNodes = Array.from(new Set(nodes))
-  var possibleNodes = [
-    {"node":0,"name":"Original Season Winner"},
-    {"node":1,"name":"Original Season Runner-Up"},
-    {"node":2,"name":"Original Season Top Half"},
-    {"node":3,"name":"Original Season Bottom Half"},
-    {"node":4,"name":"AS Winner"},
-    {"node":5,"name":"AS Runner-Up"},
-    {"node":6,"name":"AS Top Half"},
-    {"node":7,"name":"AS Bottom Half"},
-  ]
-  // for (var i = 0; i < possibleNodes.length; i++) {
-  //   var node = possibleNodes[i]
-  //   if (uniqueNodes.includes(node.node)) {
-  //   } else {
-  //     possibleNodes.splice(i, 1)
-  //   }
-  // }
-  // NOTE: tried to rename the nodes to the indices here but it's still directing the target of Tatianna's link to node 6, which doesn't exist.
-  // for (var i = 0; i < possibleNodes.length; i++) {
-  //   var node = possibleNodes[i]
-  //   node.node = i
-  // }
+
+DataParser.prototype.nodeToLinkMerger = function(links, nodes) {
   var formattedJSON = {
-    "nodes":possibleNodes,
+    "nodes":nodes,
     "links":links
   }
   return formattedJSON
