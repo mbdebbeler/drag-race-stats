@@ -145,7 +145,6 @@ DataParser.prototype.nodeBuilder = function(allStars) {
     var node = uniqueBuckets[i]
     nodes.push({"name": node})
   }
-  debugger
   return nodes
 }
 
