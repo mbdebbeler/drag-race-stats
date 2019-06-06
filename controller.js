@@ -4,15 +4,18 @@ $(document).ready(function(){
   var view = new D3View();
   var controller = new Controller(fetcher, parser, view);
   controller.bindEvents();
-  // controller.fetcher.fetch('models/AS4.json', function(json) {
-  //   view.drawSankey(json)
-  // })
-})
+  controller.loadDefaultView();
+});
 
 function Controller(fetcher, parser, view) {
   this.fetcher = fetcher
   this.parser = parser
   this.view = view
+}
+
+Controller.prototype.loadDefaultView = function() {
+  var defaultFile = "rawAPIpulls/getAllSeasons.json"
+  this.drawGraph(defaultFile, "AA");
 }
 
 Controller.prototype.bindEvents = function() {
