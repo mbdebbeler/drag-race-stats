@@ -24,6 +24,10 @@ d3.sankey = function() {
     return sankey;
   };
 
+  sankey.nodeSort = function(_) {
+    return arguments.length ? (sort = _, sankey) : sort;
+  };
+
   sankey.links = function(_) {
     if (!arguments.length) return links;
     links = _;
@@ -221,7 +225,7 @@ d3.sankey = function() {
         return center(link.target) * link.value;
       }
     }
-
+    //
     function resolveCollisions() {
       nodesByBreadth.forEach(function(nodes) {
         var node,
@@ -231,7 +235,7 @@ d3.sankey = function() {
             i;
 
         // Push any overlapping nodes down.
-        nodes.sort(ascendingDepth);
+        // nodes.sort(ascendingDepth);
         for (i = 0; i < n; ++i) {
           node = nodes[i];
           dy = y0 - node.y;

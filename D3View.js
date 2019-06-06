@@ -1,9 +1,6 @@
 function D3View() {
-}
 
-// D3View.prototype.bindEvents = function() {
-//   $('input').click(this.updateJSON(json).bind(this));
-// }
+}
 
 D3View.prototype.drawSankey = function(graph) {
   sankey
@@ -79,13 +76,33 @@ D3View.prototype.drawSankey = function(graph) {
     link.attr("d", path);
   }
 
+  // manually customize node position
+    function manualLayout() {
+      var displacements = [56, 299, 485, 647, 766, 55, 746, 307, 490, 612, 677, 429];
+      var foo = d3.selectAll("g.node");
+
+      for (j=0; j < displacements.length; j++) {
+        pickNode = foo[0][j]; //equals "this" in d3.behavior.drag()...on("dragstart")
+        d = graph.nodes[j];
+
+        d3.select(pickNode).attr("transform",
+              "translate(" + (
+                     d.x = d.x
+            ) + "," + (
+                     d.y = displacements[j] //Math.max(0, Math.min(height - d.dy, d3.event.y))
+              ) + ")");
+
+      }
+      sankey.relayout();
+      link.attr("d", path);
+    }
+
 }
 
 D3View.prototype.clearSankey = function() {
   var elements = d3.selectAll("g > *")
   elements.remove();
-  // d3.path.exit().remove().
-  // d3.sankey.remove();
+
 }
 
 

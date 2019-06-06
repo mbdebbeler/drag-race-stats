@@ -111,22 +111,22 @@ DataParser.prototype.bucketBuilder = function(allStars) {
   for (var i = 0; i < allStars.length; i++) {
     var queen = allStars[i]
     if (queen.allStarsPlace == 1) {
-      queen.allStarsPlaceBucket = "AS Winner"
+      queen.allStarsPlaceBucket = {bucket:"AS Winner", sortPriority: "5"}
     } else if (queen.allStarsPlace <= 4) {
-      queen.allStarsPlaceBucket = "AS Runner-Up"
+      queen.allStarsPlaceBucket = {bucket:"AS Runner-Up", sortPriority: "6"}
     } else if (queen.allStarsPlace > 7) {
-      queen.allStarsPlaceBucket = "AS Bottom Half"
+      queen.allStarsPlaceBucket = {bucket:"AS Bottom Half", sortPriority: "8"}
     } else {
-      queen.allStarsPlaceBucket = "AS Top Half"
+      queen.allStarsPlaceBucket = {bucket:"AS Top Half", sortPriority: "7"}
     }
     if (queen.regularPlace == 1) {
-      queen.regularPlaceBucket = "Original Season Winner"
+      queen.regularPlaceBucket = {bucket:"Original Season Winner", sortPriority: "1"}
     } else if (queen.regularPlace <= 4) {
-      queen.regularPlaceBucket = "Original Season Runner-Up"
+      queen.regularPlaceBucket = {bucket:"Original Season Runner-Up", sortPriority: "2"}
     } else if (queen.regularPlace > 7) {
-      queen.regularPlaceBucket = "Original Season Bottom Half"
+      queen.regularPlaceBucket = {bucket:"Original Season Bottom Half", sortPriority: "4"}
     } else {
-      queen.regularPlaceBucket = "Original Season Top Half"
+      queen.regularPlaceBucket = {bucket:"Original Season Top Half", sortPriority: "3"}
     }
   }
   return allStars
@@ -140,27 +140,33 @@ DataParser.prototype.nodeBuilder = function(allStars) {
     buckets.push(queen.regularPlaceBucket)
     buckets.push(queen.allStarsPlaceBucket)
   }
-  var uniqueBuckets = Array.from(new Set(buckets))
+  // var uniqueBuckets = Array.from(new Set(buckets))
+  function getUnique(arr, comp) {
+    const unique = arr
+         .map(e => e[comp])
+         .map((e, i, final) => final.indexOf(e) === i && i)
+         .filter(e => arr[e]).map(e => arr[e]);
+     return unique;
+  }
+  var uniqueBuckets = getUnique(buckets,'bucket')
   for (var i = 0; i < uniqueBuckets.length; i++) {
     var node = uniqueBuckets[i]
-    nodes.push({"name": node})
+    nodes.push({"name": node.bucket, "sortPriority": node.sortPriority})
   }
+  nodes.sort(function(a, b){return a.sortPriority - b.sortPriority});
   return nodes
 }
 
 DataParser.prototype.linkBuilder = function(allStars, nodes) {
   var links = []
-  console.log("entering the loop")
-
   for (var i = 0; i < allStars.length; i++) {
     var queen = allStars[i]
-    console.log("on queen " + queen.name)
     for (var j = 0; j < nodes.length; j++) {
       var node = nodes[j]
       var bucketName = node.name
-      if (queen.regularPlaceBucket === bucketName) {
+      if (queen.regularPlaceBucket.bucket === bucketName) {
         queen.source = j
-      } else if (queen.allStarsPlaceBucket ===  bucketName) {
+      } else if (queen.allStarsPlaceBucket.bucket ===  bucketName) {
         queen.target = j
       }
     }
@@ -174,6 +180,7 @@ DataParser.prototype.linkBuilder = function(allStars, nodes) {
     }
     links.push(newLink)
   }
+  links.sort((a, b) => (a.originalSeasonPlace < b.originalSeasonPlace) ? 1 : -1);
   return links
 }
 

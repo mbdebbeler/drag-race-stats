@@ -4,9 +4,9 @@ $(document).ready(function(){
   var view = new D3View();
   var controller = new Controller(fetcher, parser, view);
   controller.bindEvents();
-  controller.fetcher.fetch('models/AS4.json', function(json) {
-    view.drawSankey(json)
-  })
+  // controller.fetcher.fetch('models/AS4.json', function(json) {
+  //   view.drawSankey(json)
+  // })
 })
 
 function Controller(fetcher, parser, view) {
