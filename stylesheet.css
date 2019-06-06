@@ -27,6 +27,22 @@ body {
   font-family: 'Fjalla One', sans-serif;
 }
 
+#wrapper {
+    position: relative;
+    height: 0;
+    width: 100%;
+    padding: 0;
+    /* padding-bottom will be overwritten by JavaScript later */
+    padding-bottom: 100%;
+}
+#wrapper > svg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
 /* Color Palette: */
 /* dark turquoise
 #04DCD5

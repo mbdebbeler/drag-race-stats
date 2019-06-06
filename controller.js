@@ -19,9 +19,8 @@ Controller.prototype.loadDefaultView = function() {
 }
 
 Controller.prototype.bindEvents = function() {
-  $('input').click(function() {
-    var index = document.getElementById('selectedGroup').selectedIndex
-    var selectedGroup = document.getElementById('selectedGroup').getElementsByTagName('option')[index].value
+  $('.nav-content a').click(function() {
+    var selectedGroup = $(event.target).data("id")
     this.changeGraph(selectedGroup)
   }.bind(this));
 }
