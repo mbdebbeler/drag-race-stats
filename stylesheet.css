@@ -23,6 +23,29 @@
   background-color: pink;
 }
 
+.wrap-the-wrap {
+  padding: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+#sidenav-x {
+  color: black;
+  text-align: right;
+}
+
+@media only screen and (max-width: 600px) {
+  a.brand-logo {
+    font-size: 20px;
+  }
+}
+
+div.drag-target {
+  width: 0px;
+}
+
 body {
   font-family: 'Fjalla One', sans-serif;
 }

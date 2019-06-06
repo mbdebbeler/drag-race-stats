@@ -20,12 +20,18 @@
 </head>
 
 <body>
-
 <header>
 <nav class="nav-extended">
   <div class="nav-wrapper">
     <a href="#" class="brand-logo">All Stars Outcomes</a>
-    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <ul id="slide-out" class="sidenav">
+      <a href="#" class="sidenav-close"><i id="sidenav-x" class="small material-icons">close</i></a>
+      <li><a class="active" href="#">Original Season Placement</a></li>
+      <li><a href="#">Miss Congeniality<span class="badge">(coming soon)</span></a></li>
+      <li><a href="#">Season Number<span class="badge">(coming soon)</span></a></li>
+      <li><a id="view-about-card" href="#">About Drag Stats</a></li>
+    </ul>
+    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     <ul id="nav-mobile" class="right hide-on-med-and-down">
       <li><a class="active" href="sass.html">Original Season Placement</a></li>
       <li><a href="badges.html">Miss Congeniality<span class="badge">(coming soon)</span></a></li>
@@ -42,22 +48,21 @@
       <li class="tab"><a data-id="A4" href="#AllStars4">All Stars 4</a></li>
     </ul>
   </div>
+
+
 </nav>
 
-<ul class="sidenav" id="mobile-demo">
-  <li><a href="sass.html">Sass</a></li>
-  <li><a href="badges.html">Components</a></li>
-  <li><a href="collapsible.html">JavaScript</a></li>
-</ul>
 </header>
 
 
 <main>
-<div id="wrapper"></div>
+  <div class="wrap-the-wrap">
+    <div id="wrapper"></div>
+  </div>
 <script>
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
-    width = 800 - margin.left - margin.right,
+    width = 1000 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
 // format variables
@@ -67,23 +72,46 @@ var formatNumber = d3.format(",.0f"),    // zero decimal places
     color = d3.scaleOrdinal(d3.schemeCategory20);
 
 // append the svg object to the body of the page
-var svg = d3.select("div#wrapper").append("svg")
+var wrapper = d3.select("#wrapper")
+    .attr(
+        "style",
+        "padding-bottom: " + Math.ceil(height * 100 / width) + "%"
+    )
+    .append("svg")
+    .attr("viewBox", "0 0 " + width + " " + height);
+
+var svg = d3.select("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
 
 // Set the sankey diagram properties
 var sankey = d3.sankey()
-    .nodeWidth(36)
+    .nodeWidth(30)
     .nodePadding(40)
     .size([width, height]);
 
 var path = sankey.link();
 
 </script>
-</main>
 
+<div class="container hidden" id="about-card">
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">About Drag Stats</span>
+          <p>I made this using D3.js and Minimize.</p>
+          </div>
+          <div class="card-action">
+            <a href="#">Github</a>
+            <a href="#">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+</main>
 
 </body>

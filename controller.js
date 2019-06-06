@@ -5,6 +5,7 @@ $(document).ready(function(){
   var controller = new Controller(fetcher, parser, view);
   controller.bindEvents();
   controller.loadDefaultView();
+  $('.sidenav').sidenav();
 });
 
 function Controller(fetcher, parser, view) {
@@ -23,6 +24,10 @@ Controller.prototype.bindEvents = function() {
     var selectedGroup = $(event.target).data("id")
     this.changeGraph(selectedGroup)
   }.bind(this));
+  // $('.sidenav #view-about-card').click(function() {
+  //   $('#about-card').toggleClass("hidden")
+  //   $('.wrapper').toggleClass("hidden")
+  // }
 }
 
 Controller.prototype.changeGraph = function(selectedGroup) {
