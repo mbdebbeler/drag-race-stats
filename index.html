@@ -1,117 +1,69 @@
 <!DOCTYPE html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
   <title>RPDR All Stars Analysis</title>
+
+  <link href="stylesheet.css" rel="stylesheet" type="text/css">
+  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+  <link rel="icon" type="image/jpg" href="img/checkered-flag.jpg">
+
   <link href="https://fonts.googleapis.com/css?family=Fjalla+One&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="stylesheet.css" rel="stylesheet" type="text/css">
-  <link rel="icon" type="image/jpg" href="img/checkered-flag.jpg">
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
-  <script src="sankey.js"></script>
   <script src="controller.js"></script>
   <script src="dataFetcher.js"></script>
   <script src="dataParser.js"></script>
   <script src="D3View.js"></script>
+  <script src="sankey.js"></script>
 </head>
 
 <body>
-<header>
-<nav class="nav-extended">
-  <div class="nav-wrapper">
-    <a href="#" class="brand-logo">All Stars Outcomes</a>
-    <ul id="slide-out" class="sidenav">
-      <a href="#" class="sidenav-close"><i id="sidenav-x" class="small material-icons">close</i></a>
-      <li><a class="active" href="#">Original Season Placement</a></li>
-      <li><a href="#">Miss Congeniality<span class="badge">(coming soon)</span></a></li>
-      <li><a href="#">Season Number<span class="badge">(coming soon)</span></a></li>
-      <li><a id="view-about-card" href="#">About Drag Stats</a></li>
-    </ul>
-    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-    <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <li><a class="active" href="sass.html">Original Season Placement</a></li>
-      <li><a href="badges.html">Miss Congeniality<span class="badge">(coming soon)</span></a></li>
-      <li><a href="badges.html">Season Number<span class="badge">(coming soon)</span></a></li>
-      <li><a href="collapsible.html">About Drag Stats</a></li>
-    </ul>
-  </div>
-  <div class="nav-content">
-    <ul class="tabs tabs-transparent">
-      <li class="tab"><a data-id="AA" class="active" href="#AllAllStars">All Seasons of All Stars</a></li>
-      <li class="tab"><a data-id="A1" href="#AllStars1">All Stars 1</a></li>
-      <li class="tab"><a data-id="A2" href="#AllStars2">All Stars 2</a></li>
-      <li class="tab"><a data-id="A3" href="#AllStars3">All Stars 3</a></li>
-      <li class="tab"><a data-id="A4" href="#AllStars4">All Stars 4</a></li>
-    </ul>
-  </div>
+  <header>
+    <div id="header"></div>
+  </header>
+  <main>
+    <div class="wrap-the-wrap">
+      <div id="wrapper">
+        <script>
+          // set the dimensions and margins of the graph
+          var margin = {top: 10, right: 10, bottom: 10, left: 10},
+          width = 1000 - margin.left - margin.right,
+          height = 600 - margin.top - margin.bottom;
 
+          // format variables
+          var units = "queens";
+          var formatNumber = d3.format(",.0f"),    // zero decimal places
+          format = function(d) { return formatNumber(d) + " " + units; },
+          color = d3.scaleOrdinal(d3.schemeCategory20);
 
-</nav>
+          // append the svg object to the body of the page
+          var wrapper = d3.select("#wrapper")
+          .attr(
+          "style",
+          "padding-bottom: " + Math.ceil(height * 100 / width) + "%"
+          )
+          .append("svg")
+          .attr("viewBox", "0 0 " + width + " " + height);
 
-</header>
+          var svg = d3.select("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
 
+          // Set the sankey diagram properties
+          var sankey = d3.sankey()
+          .nodeWidth(30)
+          .nodePadding(40)
+          .size([width, height]);
 
-<main>
-  <div class="wrap-the-wrap">
-    <div id="wrapper"></div>
-  </div>
-<script>
-// set the dimensions and margins of the graph
-var margin = {top: 10, right: 10, bottom: 10, left: 10},
-    width = 1000 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
-
-// format variables
-var units = "queens";
-var formatNumber = d3.format(",.0f"),    // zero decimal places
-    format = function(d) { return formatNumber(d) + " " + units; },
-    color = d3.scaleOrdinal(d3.schemeCategory20);
-
-// append the svg object to the body of the page
-var wrapper = d3.select("#wrapper")
-    .attr(
-        "style",
-        "padding-bottom: " + Math.ceil(height * 100 / width) + "%"
-    )
-    .append("svg")
-    .attr("viewBox", "0 0 " + width + " " + height);
-
-var svg = d3.select("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-
-// Set the sankey diagram properties
-var sankey = d3.sankey()
-    .nodeWidth(30)
-    .nodePadding(40)
-    .size([width, height]);
-
-var path = sankey.link();
-
-</script>
-
-<div class="container hidden" id="about-card">
-  <div class="row">
-    <div class="col s12 m6">
-      <div class="card blue-grey darken-1">
-        <div class="card-content white-text">
-          <span class="card-title">About Drag Stats</span>
-          <p>I made this using D3.js and Minimize.</p>
-          </div>
-          <div class="card-action">
-            <a href="#">Github</a>
-            <a href="#">LinkedIn</a>
-          </div>
-        </div>
+          var path = sankey.link();
+        </script>
       </div>
     </div>
-</div>
-
-</main>
-
+  </main>
 </body>
