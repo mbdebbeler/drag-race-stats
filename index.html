@@ -3,14 +3,15 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
-  <title>RPDR All Stars Analysis</title>
 
-  <link href="stylesheet.css" rel="stylesheet" type="text/css">
-  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
-  <link rel="icon" type="image/jpg" href="img/checkered-flag.jpg">
+  <title>RPDR All Stars Analysis</title>
 
   <link href="https://fonts.googleapis.com/css?family=Fjalla+One&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link href="stylesheet.css" type="text/css" rel="stylesheet">
+  <link href="materialize/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="img/checkered-flag.jpg" type="image/jpg" rel="icon">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -20,6 +21,7 @@
   <script src="dataParser.js"></script>
   <script src="D3View.js"></script>
   <script src="sankey.js"></script>
+
 </head>
 
 <body>
@@ -29,41 +31,9 @@
   <main>
     <div class="wrap-the-wrap">
       <div id="wrapper">
-        <script>
-          // set the dimensions and margins of the graph
-          var margin = {top: 10, right: 10, bottom: 10, left: 10},
-          width = 1000 - margin.left - margin.right,
-          height = 600 - margin.top - margin.bottom;
-
-          // format variables
-          var units = "queens";
-          var formatNumber = d3.format(",.0f"),    // zero decimal places
-          format = function(d) { return formatNumber(d) + " " + units; },
-          color = d3.scaleOrdinal(d3.schemeCategory20);
-
-          // append the svg object to the body of the page
-          var wrapper = d3.select("#wrapper")
-          .attr(
-          "style",
-          "padding-bottom: " + Math.ceil(height * 100 / width) + "%"
-          )
-          .append("svg")
-          .attr("viewBox", "0 0 " + width + " " + height);
-
-          var svg = d3.select("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-
-          // Set the sankey diagram properties
-          var sankey = d3.sankey()
-          .nodeWidth(30)
-          .nodePadding(40)
-          .size([width, height]);
-
-          var path = sankey.link();
-        </script>
       </div>
+    </div>
+    <div class="hidden about">
     </div>
   </main>
 </body>

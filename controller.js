@@ -4,19 +4,11 @@ $(document).ready(function(){
   var view = new D3View();
   var controller = new Controller(fetcher, parser, view);
   controller.loadDefaultView();
-  $('.sidenav').sidenav();
   $("#header").load("header.html", function() {
     controller.bindEvents();
+    $('.sidenav').sidenav();
   });
 });
-
-// (function ($, window, document, undefined) {
-//
-//   $(function () {
-//     $("#header").load("header.html");
-//   });
-//
-// })(jQuery, window, document);
 
 function Controller(fetcher, parser, view) {
   this.fetcher = fetcher
