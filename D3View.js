@@ -3,6 +3,7 @@ function D3View() {
   this.margin = {top: 10, right: 10, bottom: 10, left: 10},
   this.width = 1000 - this.margin.left - this.margin.right,
   this.height = 600 - this.margin.top - this.margin.bottom;
+  this.buildToolTip()
   this.appendSVG()
 
   // format variables
@@ -31,19 +32,57 @@ D3View.prototype.drawSankey = function(graph) {
       .links(graph.links)
       .layout(32);
 
-// add in the links
+// build tooltips for link hover behavior
+      var tooltip = d3.select("#wrapper")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("position", "absolute")
+      .style("z-index", "10")
+          .style("width","120px")
+          .style("height","220px")
+          .style("padding","2px")
+          .style("font","12px sans-serif")
+          .style("border","0px")
+          .style("border-radius","8px")
+          .style("background", "lightsteelblue")
+      .style("visibility", "hidden");
+
+// add in the links and attach tooltips
   var link = this.svg.append("g").selectAll(".link")
       .data(graph.links)
     .enter().append("path")
       .attr("class", "link")
       .attr("d", this.path)
       .style("stroke-width", function(d) { return Math.max(1, d.dy); })
-      .sort(function(a, b) { return b.dy - a.dy; });
+      .sort(function(a, b) { return b.dy - a.dy; })
+      .on("mouseover", function(d){
+            var imgName = d.imageUrl
+            tooltip.text(d.queen);
+            tooltip.append("img")
+                    .attr("src", imgName)
+                    .attr("x", -8)
+                    .attr("y", -8)
+                    .attr("width","100px")
+                    .attr("height","200px");
+            tooltip.style("visibility", "visible")
+        })
+      .on("mousemove", function(){
+        var x = event.pageX - $('#wrapper').offset().left + 10;
+        var y = event.pageY - $('#wrapper').offset().top + 10;
+        return tooltip
+        .style("top", y+"px")
+        .style("left", x+"px");
+      })
+
+
+      .on("mouseout", function(){
+        return tooltip.style("visibility", "hidden");
+      });
 
 // add the link titles
-  link.append("title")
-        .text(function(d) {
-        return d.queen });
+  // link.append("title")
+  //       .text(function(d) {
+  //       return d.queen });
 
 
 // add in the nodes
@@ -125,4 +164,10 @@ D3View.prototype.appendSVG = function() {
   )
   .append("svg")
   .attr("viewBox", "0 0 " + this.width + " " + this.height);
+}
+
+
+D3View.prototype.buildToolTip = function()  {
+
+
 }

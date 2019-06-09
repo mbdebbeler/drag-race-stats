@@ -1,13 +1,14 @@
-function DataParser() {
-
+function DataParser(queenData) {
+  this.queenData = queenData
 }
 
-DataParser.prototype.parse = function(data, seasonNumber) {
-  var allStarsSeasons = this.seasonSeparator(data)[0]
-  var regularSeasons = this.seasonSeparator(data)[1]
+DataParser.prototype.parse = function(seasonData, seasonNumber) {
+  var allStarsSeasons = this.seasonSeparator(seasonData)[0]
+  var regularSeasons = this.seasonSeparator(seasonData)[1]
   var allStarsCompetitors = this.allStarsPlacementLookup(allStarsSeasons)
   var allStarsInRegSeason = this.regularPlaceLookup(allStarsCompetitors, regularSeasons)
   var selectedCompetitors = this.seasonSelector(allStarsCompetitors, seasonNumber)
+  this.addImagesToQueens(selectedCompetitors)
   var queensInBuckets = this.bucketBuilder(selectedCompetitors)
   var nodes = this.nodeBuilder(queensInBuckets)
   var links = this.linkBuilder(queensInBuckets, nodes)
@@ -157,6 +158,21 @@ DataParser.prototype.nodeBuilder = function(allStars) {
   return nodes
 }
 
+DataParser.prototype.addImagesToQueens = function(queens) {
+  queens.forEach(queen => {
+    var id = queen.id
+    queen.imageUrl = this.getImageForQueen(id)
+  })
+}
+
+DataParser.prototype.getImageForQueen = function(id) {
+  // return this.queenData.find(function(queen) { queen.id === id}).image_url;
+  // return this.queenData.find(queen => {
+  //   queen.id === id
+  // }).image_url;
+  return this.queenData.find(queen => queen.id === id).image_url;
+}
+
 DataParser.prototype.linkBuilder = function(allStars, nodes) {
   var links = []
   for (var i = 0; i < allStars.length; i++) {
@@ -173,6 +189,8 @@ DataParser.prototype.linkBuilder = function(allStars, nodes) {
     var newLink = {
       "source":queen.source,
       "target":queen.target,
+      "queenID":queen.id,
+      "imageUrl":queen.imageUrl,
       "value":2,
       "queen":queen.name,
       "originalSeasonPlace":queen.regularPlace,

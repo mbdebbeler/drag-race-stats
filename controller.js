@@ -1,12 +1,14 @@
 $(document).ready(function(){
   var fetcher = new DataFetcher();
-  var parser = new DataParser();
-  var view = new D3View();
-  var controller = new Controller(fetcher, parser, view);
-  controller.loadDefaultView();
-  $("#header").load("header.html", function() {
-    controller.bindEvents();
-    $('.sidenav').sidenav();
+  fetcher.fetch("rawAPIpulls/getAllQueens.json", function(json){
+    var parser = new DataParser(json);
+    var view = new D3View();
+    var controller = new Controller(fetcher, parser, view);
+    controller.loadDefaultView();
+    $("#header").load("header.html", function() {
+      controller.bindEvents();
+      $('.sidenav').sidenav();
+    });
   });
 });
 
