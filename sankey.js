@@ -1,3 +1,4 @@
+// Add a sankey extension to D3
 d3.sankey = function() {
   var sankey = {},
       nodeWidth = 24,

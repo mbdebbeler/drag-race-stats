@@ -1,65 +1,39 @@
 <!DOCTYPE html>
 
 <head>
-  <meta charset="utf-8">
-  <title>RPDR All Stars Analysis</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+
+  <title>RPDR All Stars Analysis</title>
+
   <link href="https://fonts.googleapis.com/css?family=Fjalla+One&display=swap" rel="stylesheet">
-  <link href="stylesheet.css" rel="stylesheet" type="text/css">
-  <link rel="icon" type="image/jpg" href="img/checkered-flag.jpg">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link href="stylesheet.css" type="text/css" rel="stylesheet">
+  <link href="materialize/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="img/checkered-flag.jpg" type="image/jpg" rel="icon">
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script src="sankey.js"></script>
+  <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
   <script src="controller.js"></script>
   <script src="dataFetcher.js"></script>
   <script src="dataParser.js"></script>
   <script src="D3View.js"></script>
+  <script src="sankey.js"></script>
+
 </head>
 
 <body>
-
-<h1>RuPaul's Drag Race All Stars Outcomes <br> by Original Season Performance</h1>
-
-<div>
-  <select id="selectedGroup">
-    <option value="A1">All Stars Season 1</option>
-    <option value="A2">All Stars Season 2</option>
-    <option value="A3">All Stars Season 3</option>
-    <option value="A4" selected="true">All Stars Season 4</option>
-    <option value="AA">All Seasons of All Stars</option>
-  </select>
-  <input type="submit" value="Show Me">
-</div>
-
-<script>
-
-// set the dimensions and margins of the graph
-var margin = {top: 10, right: 10, bottom: 10, left: 10},
-    width = 1000 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
-
-// format variables
-var units = "queens";
-var formatNumber = d3.format(",.0f"),    // zero decimal places
-    format = function(d) { return formatNumber(d) + " " + units; },
-    color = d3.scaleOrdinal(d3.schemeCategory20);
-
-// append the svg object to the body of the page
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
-
-// Set the sankey diagram properties
-var sankey = d3.sankey()
-    .nodeWidth(36)
-    .nodePadding(40)
-    .size([width, height]);
-
-var path = sankey.link();
-
-</script>
-
+  <header>
+    <div id="header"></div>
+  </header>
+  <main>
+    <div class="wrap-the-wrap">
+      <div id="wrapper">
+      </div>
+    </div>
+    <div class="hidden about">
+    </div>
+  </main>
 </body>

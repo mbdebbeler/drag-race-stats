@@ -1,3 +1,4 @@
+
 .node rect {
   cursor: move;
   fill-opacity: .9;
@@ -19,10 +20,79 @@
   stroke-opacity: .5;
 }
 
+.link:active {
+  stroke-opacity: .5;
+}
+
 .pink {
   background-color: pink;
+}
+
+.wrap-the-wrap {
+  padding: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+div.drag-target {
+  width: 0px;
 }
 
 body {
   font-family: 'Fjalla One', sans-serif;
 }
+
+#wrapper {
+    position: relative;
+    height: 0;
+    width: 100%;
+    padding: 0;
+    /* padding-bottom will be overwritten by JavaScript later */
+    padding-bottom: 100%;
+}
+
+#wrapper > svg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+#sidenav-x {
+  color: black;
+  text-align: right;
+}
+
+@media only screen and (max-width: 600px) {
+  a.brand-logo {
+    font-size: 20px;
+  }
+}
+
+#header > * {
+  background-color: #1EC5B9;
+}
+
+/* Color Palette: */
+/* dark turquoise
+#04DCD5
+light sea green
+#1EC5B9
+hot pink
+#04DCD5
+dark slate gray
+#1C504C
+goldenrod
+#E9B01C
+pale goldenrod
+#EDC9B4
+sienna
+#A94E22
+white
+#FBFBFB
+old rose
+#FBFBFB
+ */
