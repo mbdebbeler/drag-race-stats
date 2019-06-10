@@ -1,8 +1,24 @@
+header > * {
+  background-color: #FB40A2;
+}
+
+nav > * {
+  background-color: #FB40A2;
+}
+
+div.drag-target {
+  width: 0px;
+}
+
+body {
+  font-family: 'Fjalla One', sans-serif;
+}
+
 
 .node rect {
   cursor: move;
   fill-opacity: .9;
-  shape-rendering: crispEdges;
+  border: 0px;
 }
 
 .node text {
@@ -24,10 +40,6 @@
   stroke-opacity: .5;
 }
 
-.pink {
-  background-color: pink;
-}
-
 .wrap-the-wrap {
   padding: 10px;
 }
@@ -36,20 +48,11 @@
   display: none;
 }
 
-div.drag-target {
-  width: 0px;
-}
-
-body {
-  font-family: 'Fjalla One', sans-serif;
-}
-
 #wrapper {
     position: relative;
     height: 0;
     width: 100%;
     padding: 0;
-    /* padding-bottom will be overwritten by JavaScript later */
     padding-bottom: 100%;
 }
 
@@ -66,33 +69,29 @@ body {
   text-align: right;
 }
 
+#fine-print {
+  font-size: 10px;
+  font-style: italic;
+}
+
+#about-card a {
+  color: #E9B01C;
+}
+
 @media only screen and (max-width: 600px) {
   a.brand-logo {
     font-size: 20px;
   }
 }
 
-#header > * {
-  background-color: #1EC5B9;
-}
-
 /* Color Palette: */
-/* dark turquoise
-#04DCD5
-light sea green
-#1EC5B9
-hot pink
-#04DCD5
-dark slate gray
-#1C504C
-goldenrod
-#E9B01C
-pale goldenrod
-#EDC9B4
-sienna
-#A94E22
-white
-#FBFBFB
-old rose
-#FBFBFB
+/* dark turquoise #04DCD5
+light sea green #1EC5B9
+hot pink #FB40A2
+dark slate gray #1C504C
+goldenrod #E9B01C
+pale goldenrod #EDC9B4
+sienna #A94E22
+white #FBFBFB
+old rose #FBFBFB
  */

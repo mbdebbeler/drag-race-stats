@@ -20,7 +20,7 @@ function Controller(fetcher, parser, view) {
 
 Controller.prototype.loadDefaultView = function() {
   var defaultFile = "rawAPIpulls/getAllSeasons.json"
-  this.drawGraph(defaultFile, "AA");
+  this.drawGraph(defaultFile, "AA")
 }
 
 Controller.prototype.bindEvents = function() {
@@ -28,10 +28,15 @@ Controller.prototype.bindEvents = function() {
     var selectedGroup = $(event.target).data("id")
     this.changeGraph(selectedGroup)
   }.bind(this));
-  // $('.sidenav #view-about-card').click(function() {
-  //   $('#about-card').toggleClass("hidden")
-  //   $('.wrapper').toggleClass("hidden")
-  // }
+}
+
+Controller.prototype.hideNav = function() {
+  var aboutCard = $('#about-card')
+  if (aboutCard !== undefined) {
+    $('.nav-content').addClass("hidden")
+  } else {
+    $('.nav-content').removeClass("hidden")
+  }
 }
 
 Controller.prototype.changeGraph = function(selectedGroup) {
