@@ -39,12 +39,11 @@ D3View.prototype.drawSankey = function(graph) {
       .style("position", "absolute")
       .style("z-index", "10")
           .style("width","120px")
-          .style("height","220px")
+          .style("height","120px")
           .style("padding","2px")
+          .style("text-align","center")
           .style("font","12px sans-serif")
           .style("border","0px")
-          .style("border-radius","8px")
-          .style("background", "lightsteelblue")
       .style("visibility", "hidden");
 
 // add in the links and attach tooltips
@@ -58,12 +57,17 @@ D3View.prototype.drawSankey = function(graph) {
       .on("mouseover", function(d){
             var imgName = d.imageUrl
             tooltip.text(d.queen);
-            tooltip.append("img")
-                    .attr("src", imgName)
-                    .attr("x", -8)
-                    .attr("y", -8)
-                    .attr("width","100px")
-                    .attr("height","200px");
+            tooltip
+              .append("div")
+              .style("position", "inline-block")
+              .attr("x", 0)
+              .attr("y", 0)
+              .style("width","100%")
+              .style("height","100%")
+              .style("border-radius","16px")
+                    .style("background-image", "url("+imgName+")", )
+                    .style("background-size", "100%")
+                    .style("background-repeat", "no-repeat")
             tooltip.style("visibility", "visible")
         })
       .on("mousemove", function(){
