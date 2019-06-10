@@ -12,7 +12,7 @@ DataParser.prototype.parse = function(seasonData, seasonNumber) {
   var queensInBuckets = this.bucketBuilder(selectedCompetitors)
   var nodes = this.nodeBuilder(queensInBuckets)
   var links = this.linkBuilder(queensInBuckets, nodes)
-  var formattedJSON = this.nodeToLinkMerger(links, nodes)
+  var formattedJSON = this.nodeToLinkMerger(links, nodes, seasonNumber)
   return formattedJSON
 }
 
@@ -203,7 +203,7 @@ DataParser.prototype.linkBuilder = function(allStars, nodes) {
 }
 
 
-DataParser.prototype.nodeToLinkMerger = function(links, nodes) {
+DataParser.prototype.nodeToLinkMerger = function(links, nodes, seasonNumber) {
   var formattedJSON = {
     "nodes":nodes,
     "links":links

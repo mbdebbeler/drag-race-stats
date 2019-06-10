@@ -40,14 +40,8 @@ Controller.prototype.hideNav = function() {
 }
 
 Controller.prototype.changeGraph = function(selectedGroup) {
-  if (selectedGroup == "A4") {
-    this.fetcher.fetch('models/AS4.json', function(json) {
-      this.view.updateJSON(json)
-    }.bind(this));
-  } else {
-    var filename = "rawAPIpulls/getAllSeasons.json"
-    this.drawGraph(filename, selectedGroup)
-  }
+  var filename = "rawAPIpulls/getAllSeasons.json"
+  this.drawGraph(filename, selectedGroup)
 }
 
 Controller.prototype.drawGraph = function(filename, selectedGroup) {
