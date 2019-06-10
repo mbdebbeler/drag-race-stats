@@ -10,7 +10,9 @@ function D3View() {
   var units = "queens";
   var formatNumber = d3.format(",.0f")    // zero decimal places
   this.format = function(d) { return formatNumber(d) + " " + units; }
-  this.color = d3.scaleOrdinal(d3.schemeCategory20);
+  this.color = d3.scaleLinear()
+    .domain([0, 7])
+    .range(["#1EC5B9", "#E9B01C"]);
 
   // set the sankey diagram properties
   this.sankey = d3.sankey()
@@ -78,16 +80,9 @@ D3View.prototype.drawSankey = function(graph) {
         .style("left", x+"px");
       })
 
-
       .on("mouseout", function(){
         return tooltip.style("visibility", "hidden");
       });
-
-// add the link titles
-  // link.append("title")
-  //       .text(function(d) {
-  //       return d.queen });
-
 
 // add in the nodes
   var node = this.svg.append("g").selectAll(".node")
@@ -107,14 +102,13 @@ D3View.prototype.drawSankey = function(graph) {
 
       var color = this.color
       var format = this.format
+
 // add the rectangles for the nodes
   node.append("rect")
       .attr("height", function(d) { return d.dy; })
       .attr("width", this.sankey.nodeWidth())
       .style("fill", function(d) {
-      return d.color = color(d.name.replace(/ .*/, "")); })
-      .style("stroke", function(d) {
-      return d3.rgb(d.color).darker(2); })
+      return d.color = color(d.sortPriority); })
     .append("title")
       .text(function(d) {
       return d.name + "\n" + format(d.value); });

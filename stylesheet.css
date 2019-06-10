@@ -14,7 +14,6 @@ body {
   font-family: 'Fjalla One', sans-serif;
 }
 
-
 .node rect {
   cursor: move;
   fill-opacity: .9;
