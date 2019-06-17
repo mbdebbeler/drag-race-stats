@@ -3,12 +3,19 @@ function DataParser(queenData) {
 }
 
 DataParser.prototype.parse = function(seasonData, seasonNumber) {
-  var allStarsSeasons = this.seasonSeparator(seasonData)[0]
-  var regularSeasons = this.seasonSeparator(seasonData)[1]
-  var allStarsCompetitors = this.allStarsPlacementLookup(allStarsSeasons)
-  var allStarsInRegSeason = this.regularPlaceLookup(allStarsCompetitors, regularSeasons)
-  var selectedCompetitors = this.seasonSelector(allStarsCompetitors, seasonNumber)
+// separate data for seasons of All Stars from data for Regular Seasons
+  var allStarsSeasonsData = this.seasonSeparator(seasonData)[0]
+  var regularSeasonsData = this.seasonSeparator(seasonData)[1]
+
+// create All-All Stars Roster from all competitors in All Stars seasons
+  var allStarsCompetitors = this.allStarsPlacementLookup(allStarsSeasonsData)
+// pull data about All Stars Competitors performance in regular seasons
+  var allStarsInRegSeason = this.regularPlaceLookup(allStarsCompetitors, regularSeasonsData)
+// cull list of competitors for SVG with user input
+  var selectedCompetitors = this.seasonSelector(allStarsInRegSeason, seasonNumber)
+
   this.addImagesToQueens(selectedCompetitors)
+  this.addMissCongenialityToQueens(selectedCompetitors)
   var queensInBuckets = this.bucketBuilder(selectedCompetitors)
   var nodes = this.nodeBuilder(queensInBuckets)
   var links = this.linkBuilder(queensInBuckets, nodes)
@@ -46,22 +53,24 @@ DataParser.prototype.allStarsPlacementLookup = function(allStarsSeasons) {
   return allStarsCompetitors
 }
 
+
 DataParser.prototype.regularPlaceLookup = function(allStarsCompetitors, regularSeasons) {
   var allStarsInRegSeason = []
   for (i = 0; i < allStarsCompetitors.length; i++) {
+    var regularSeasonNumber
+    var regularSeasonPlace
     var queen = allStarsCompetitors[i]
     var queenID = allStarsCompetitors[i].id
     for (j = 0; j < regularSeasons.length; j++) {
-      var seasonNumber = regularSeasons[j].seasonNumber
+      regularSeasonNumber = regularSeasons[j].seasonNumber
       var foundQueens = regularSeasons[j].queens.filter(function(queen){
-        queen.regularPlace = queen.place
-        queen.seasonNumber = seasonNumber
         return queen.id == queenID
       })
       if (foundQueens != []) {
         for (k = 0; k < foundQueens.length; k++) {
-        allStarsInRegSeason.push(foundQueens[k])
-        queen.regularPlace = foundQueens[k].regularPlace
+        queen.regularSeasonNumber = regularSeasonNumber
+        queen.regularSeasonPlace = foundQueens[k].place
+        allStarsInRegSeason.push(queen)
         }
       }
     }
@@ -88,7 +97,6 @@ DataParser.prototype.mergeQueens = function(regQueens, aSQueens) {
   function areQueensEqual(g1, g2) {
       return g1.id === g2.id;
   }
-
   var allStars = arrayUnion(regQueens, aSQueens, areQueensEqual);
 }
 
@@ -107,6 +115,11 @@ DataParser.prototype.seasonSelector = function(allStars, seasonNumber) {
   }
   return selectedQueens
 }
+
+// TODO: bucket builder should use user input to call which regular buckets to build
+// missCongenialityVsAllStarsPlace
+// regPlaceVsAllStarsPlace
+// regSeasonVsAllStarsPlace
 
 DataParser.prototype.bucketBuilder = function(allStars) {
   for (var i = 0; i < allStars.length; i++) {
@@ -141,7 +154,6 @@ DataParser.prototype.nodeBuilder = function(allStars) {
     buckets.push(queen.regularPlaceBucket)
     buckets.push(queen.allStarsPlaceBucket)
   }
-  // var uniqueBuckets = Array.from(new Set(buckets))
   function getUnique(arr, comp) {
     const unique = arr
          .map(e => e[comp])
@@ -166,11 +178,18 @@ DataParser.prototype.addImagesToQueens = function(queens) {
 }
 
 DataParser.prototype.getImageForQueen = function(id) {
-  // return this.queenData.find(function(queen) { queen.id === id}).image_url;
-  // return this.queenData.find(queen => {
-  //   queen.id === id
-  // }).image_url;
   return this.queenData.find(queen => queen.id === id).image_url;
+}
+
+DataParser.prototype.addMissCongenialityToQueens = function(queens) {
+  queens.forEach(queen => {
+    var id = queen.id
+    queen.missCongeniality = this.getMissCongenialityForQueen(id)
+  })
+}
+
+DataParser.prototype.getMissCongenialityForQueen = function(id) {
+  return this.queenData.find(queen => queen.id === id).missCongeniality;
 }
 
 DataParser.prototype.linkBuilder = function(allStars, nodes) {
