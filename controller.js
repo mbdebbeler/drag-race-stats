@@ -8,6 +8,9 @@ $(document).ready(function(){
     $("#header").load("header.html", function() {
       controller.bindEvents();
       $('.sidenav').sidenav();
+      $('.collapsible').collapsible();
+      $('.dropdown-trigger').dropdown();
+      $('.modal').modal();
     });
   });
 });

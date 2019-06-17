@@ -5,25 +5,26 @@ function DataParser(queenData) {
 DataParser.prototype.parse = function(seasonData, userInput) {
   var groupingCode = userInput
 
-// separate data for seasons of All Stars from data for Regular Seasons
-  var allStarsSeasonsData = this.seasonSeparator(seasonData)[0]
-  var regularSeasonsData = this.seasonSeparator(seasonData)[1]
+  // separate data for seasons of All Stars from data for Regular Seasons
+  var separatedSeasons = this.seasonSeparator(seasonData)
+  var allStarsSeasonsData = separatedSeasons[0]
+  var regularSeasonsData = separatedSeasons[1]
 
-// create All-All Stars Roster from all competitors in All Stars seasons
+  // create All-All Stars Roster from all competitors in All Stars seasons
   var allStarsCompetitors = this.allStarsPlacementLookup(allStarsSeasonsData)
-// pull data about All Stars Competitors performance in regular seasons
+  // pull data about All Stars Competitors performance in regular seasons
   var allStarsInRegSeason = this.regularPlaceLookup(allStarsCompetitors, regularSeasonsData)
-// cull list of competitors for SVG with user input
+  // cull list of competitors for SVG with user input
   var selectedCompetitors = this.rosterBuilder(allStarsInRegSeason, groupingCode)
 
-// add image urls and Miss Congeniality data to roster of selected competitors
+  // add image urls and Miss Congeniality data to roster of selected competitors
   this.addImagesToQueens(selectedCompetitors)
   this.addMissCongenialityToQueens(selectedCompetitors)
 
-// create buckets for queens
+  // create buckets for queens
   var queensInBuckets = this.bucketBuilder(selectedCompetitors, groupingCode)
 
-// build nodes and links from buckets, merge them, return the formatted JSON
+  // build nodes and links from buckets, merge them, return the formatted JSON
   var nodes = this.nodeBuilder(queensInBuckets)
   var links = this.linkBuilder(queensInBuckets, nodes)
   var formattedJSON = this.nodeToLinkMerger(links, nodes, groupingCode)
@@ -154,7 +155,7 @@ DataParser.prototype.missCongenialityVsAllStarsPlace = function(allStars, groupi
     if (queen.missCongeniality === true) {
       queen.leftBucket = {bucket:"Miss Congeniality in Original Season", sortPriority: "1"}
     } else {
-      queen.leftBucket = {bucket:"not Miss Congeniality in Original Season", sortPriority: "2"}
+      queen.leftBucket = {bucket:"not Miss Congeniality", sortPriority: "2"}
     }
   }
   return allStars
