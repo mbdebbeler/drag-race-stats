@@ -28,6 +28,10 @@ Controller.prototype.bindEvents = function() {
     var selectedGroup = $(event.target).data("id")
     this.changeGraph(selectedGroup)
   }.bind(this));
+  $('.nav-wrapper a').click(function() {
+    var selectedGroup = $(event.target).data("id")
+    this.changeGraph(selectedGroup)
+  }.bind(this));
 }
 
 Controller.prototype.hideNav = function() {
