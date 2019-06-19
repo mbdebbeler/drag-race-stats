@@ -1,28 +1,41 @@
-<nav class="nav-extended">
+<nav>
   <div class="nav-wrapper">
-    <a href="index.html" class="brand-logo">RPDR Data Viz</a>
+    <a href="index.html" class="brand-logo">RPDR All Stars Data Viz</a>
     <ul id="slide-out" class="sidenav">
       <a href="#" class="sidenav-close"><i id="sidenav-x" class="small material-icons">close</i></a>
-      <li><a href="index.html">All Stars x Original Season Placement</a></li>
-      <li><a href="#">All Stars x Miss Congeniality<span class="new badge" data-badge-caption="coming soon"></span></a></li>
-      <li><a href="#">All Stars x Season Number<span class="new badge" data-badge-caption="coming soon"></span></a></li>
-      <li><a id="view-about-card" href="about.html">About</a></li>
+      <li><a class="view-about-card waves-effect waves-yellow" href="#">About</a></li>
+      <li><a class="link-button waves-effect waves-yellow" data-id="MC" href="#">Miss Congeniality<span class="new badge"></span></a></li>
+      <li><a class="link-button waves-effect waves-yellow" data-id="RS" href="#">Original Season<span class="new badge"></span></a></li>
+      <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+          <li>
+            <a class="collapsible-header nav-content waves-effect waves-yellow">Original Finish<i class="material-icons">arrow_drop_down</i></a>
+            <div class="collapsible-body">
+              <ul>
+                <li class="link-button"><a data-id="AA" href="#!">All Seasons of All Stars</a></li>
+                <li class="link-button"><a data-id="A1" href="#!">All Stars 1</a></li>
+                <li class="link-button"><a data-id="A2" href="#!">All Stars 2</a></li>
+                <li class="link-button"><a data-id="A3" href="#!">All Stars 3</a></li>
+                <li class="link-button"><a data-id="A4" href="#!">All Stars 4</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </li>
     </ul>
     <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <li><a href="index.html">All Stars x Original Season Placement</a></li>
-      <li><a href="#">All Stars x Miss Congeniality<span class="new badge" data-badge-caption="coming soon"></span></a></li>
-      <li><a href="#">All Stars x Season Number<span class="new badge" data-badge-caption="coming soon"></span></a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
-  </div>
-  <div class="nav-content">
-    <ul class="tabs tabs-transparent">
-      <li class="tab"><a data-id="AA" class="active" href="#AllAllStars">All Seasons of All Stars</a></li>
-      <li class="tab"><a data-id="A1" href="#AllStars1">All Stars 1</a></li>
-      <li class="tab"><a data-id="A2" href="#AllStars2">All Stars 2</a></li>
-      <li class="tab"><a data-id="A3" href="#AllStars3">All Stars 3</a></li>
-      <li class="tab"><a data-id="A4" href="#AllStars4">All Stars 4</a></li>
+      <li><a class="dropdown-trigger waves-effect waves-purple" href="#!" data-target="dropdown1">Original Finish<i class="material-icons right">arrow_drop_down</i></a></li>
+        <ul id='dropdown1' class='dropdown-content nav-content'>
+          <li class="link-button"><a data-id="AA" href="#!">All Seasons of All Stars</a></li>
+          <li class="link-button"><a data-id="A1" href="#!">All Stars 1</a></li>
+          <li class="link-button"><a data-id="A2" href="#!">All Stars 2</a></li>
+          <li class="link-button"><a data-id="A3" href="#!">All Stars 3</a></li>
+          <li class="link-button"><a data-id="A4" href="#!">All Stars 4</a></li>
+        </ul>
+      <li><a class="link-button waves-effect waves-purple" data-id="MC" href="#">Miss Congeniality<span class="new badge"></span></a></li>
+      <li><a class="link-button waves-effect waves-purple" data-id="RS" href="#">Original Season<span class="new badge"></span></a></li>
+      <li><a class="view-about-card waves-effect waves-purple" href="#">About</a></li>
     </ul>
   </div>
 </nav>

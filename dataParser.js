@@ -2,24 +2,32 @@ function DataParser(queenData) {
   this.queenData = queenData
 }
 
-DataParser.prototype.parse = function(seasonData, seasonNumber) {
-// separate data for seasons of All Stars from data for Regular Seasons
-  var allStarsSeasonsData = this.seasonSeparator(seasonData)[0]
-  var regularSeasonsData = this.seasonSeparator(seasonData)[1]
+DataParser.prototype.parse = function(seasonData, userInput) {
+  var groupingCode = userInput
 
-// create All-All Stars Roster from all competitors in All Stars seasons
+  // separate data for seasons of All Stars from data for Regular Seasons
+  var separatedSeasons = this.seasonSeparator(seasonData)
+  var allStarsSeasonsData = separatedSeasons[0]
+  var regularSeasonsData = separatedSeasons[1]
+
+  // create All-All Stars Roster from all competitors in All Stars seasons
   var allStarsCompetitors = this.allStarsPlacementLookup(allStarsSeasonsData)
-// pull data about All Stars Competitors performance in regular seasons
+  // pull data about All Stars Competitors performance in regular seasons
   var allStarsInRegSeason = this.regularPlaceLookup(allStarsCompetitors, regularSeasonsData)
-// cull list of competitors for SVG with user input
-  var selectedCompetitors = this.seasonSelector(allStarsInRegSeason, seasonNumber)
+  // cull list of competitors for SVG with user input
+  var selectedCompetitors = this.rosterBuilder(allStarsInRegSeason, groupingCode)
 
+  // add image urls and Miss Congeniality data to roster of selected competitors
   this.addImagesToQueens(selectedCompetitors)
   this.addMissCongenialityToQueens(selectedCompetitors)
-  var queensInBuckets = this.bucketBuilder(selectedCompetitors)
+
+  // create buckets for queens
+  var queensInBuckets = this.bucketBuilder(selectedCompetitors, groupingCode)
+
+  // build nodes and links from buckets, merge them, return the formatted JSON
   var nodes = this.nodeBuilder(queensInBuckets)
   var links = this.linkBuilder(queensInBuckets, nodes)
-  var formattedJSON = this.nodeToLinkMerger(links, nodes, seasonNumber)
+  var formattedJSON = this.nodeToLinkMerger(links, nodes, groupingCode)
   return formattedJSON
 }
 
@@ -78,36 +86,14 @@ DataParser.prototype.regularPlaceLookup = function(allStarsCompetitors, regularS
   return allStarsInRegSeason
 }
 
-DataParser.prototype.mergeQueens = function(regQueens, aSQueens) {
-  function arrayUnion(arr1, arr2, equalityFunc) {
-      var union = arr1.concat(arr2);
-
-      for (var i = 0; i < union.length; i++) {
-          for (var j = i+1; j < union.length; j++) {
-              if (equalityFunc(union[i], union[j])) {
-                  union.splice(j, 1);
-                  j--;
-              }
-          }
-      }
-
-      return union;
-  }
-
-  function areQueensEqual(g1, g2) {
-      return g1.id === g2.id;
-  }
-  var allStars = arrayUnion(regQueens, aSQueens, areQueensEqual);
-}
-
-DataParser.prototype.seasonSelector = function(allStars, seasonNumber) {
+DataParser.prototype.rosterBuilder = function(allStars, groupingCode) {
   var selectedQueens = []
   var unselectedQueens = []
   for (var i = 0; i < allStars.length; i++) {
     var queen = allStars[i]
-    if (seasonNumber == "AA") {
+    if (groupingCode == "AA" || groupingCode == "MC" || groupingCode == "RS") {
       selectedQueens.push(queen)
-    } else if (queen.allStarsSeasonNumber == seasonNumber) {
+    } else if (queen.allStarsSeasonNumber == groupingCode) {
       selectedQueens.push(queen)
     } else {
       unselectedQueens.push(queen)
@@ -116,43 +102,98 @@ DataParser.prototype.seasonSelector = function(allStars, seasonNumber) {
   return selectedQueens
 }
 
-// TODO: bucket builder should use user input to call which regular buckets to build
-// missCongenialityVsAllStarsPlace
-// regPlaceVsAllStarsPlace
-// regSeasonVsAllStarsPlace
 
-DataParser.prototype.bucketBuilder = function(allStars) {
+DataParser.prototype.bucketBuilder = function(allStars, groupingCode) {
+    switch(groupingCode) {
+    case "AA":
+    case "A1":
+    case "A2":
+    case "A3":
+    case "A4":
+      return this.regSeasonPlaceVsAllStarsPlace(allStars)
+      break;
+    case "MC":
+      return this.missCongenialityVsAllStarsPlace(allStars)
+      break;
+    case "RS":
+      return this.regSeasonNumberVsAllStarsPlace(allStars)
+      break;
+    default:
+      return this.regSeasonPlaceVsAllStarsPlace(allStars)
+  }
+}
+
+DataParser.prototype.regSeasonNumberVsAllStarsPlace = function(allStars, groupingCode) {
   for (var i = 0; i < allStars.length; i++) {
     var queen = allStars[i]
     if (queen.allStarsPlace == 1) {
-      queen.allStarsPlaceBucket = {bucket:"AS Winner", sortPriority: "5"}
+      queen.rightBucket = {bucket:"All Stars Winner", sortPriority: "12"}
     } else if (queen.allStarsPlace <= 4) {
-      queen.allStarsPlaceBucket = {bucket:"AS Runner-Up", sortPriority: "6"}
+      queen.rightBucket = {bucket:"All Stars Runner-Up", sortPriority: "13"}
     } else if (queen.allStarsPlace > 7) {
-      queen.allStarsPlaceBucket = {bucket:"AS Bottom Half", sortPriority: "8"}
+      queen.rightBucket = {bucket:"All Stars Bottom Half", sortPriority: "15"}
     } else {
-      queen.allStarsPlaceBucket = {bucket:"AS Top Half", sortPriority: "7"}
+      queen.rightBucket = {bucket:"All Stars Top Half", sortPriority: "14"}
     }
-    if (queen.regularPlace == 1) {
-      queen.regularPlaceBucket = {bucket:"Original Season Winner", sortPriority: "1"}
-    } else if (queen.regularPlace <= 4) {
-      queen.regularPlaceBucket = {bucket:"Original Season Runner-Up", sortPriority: "2"}
-    } else if (queen.regularPlace > 7) {
-      queen.regularPlaceBucket = {bucket:"Original Season Bottom Half", sortPriority: "4"}
+    queen.leftBucket = {bucket: "Season " + queen.regularSeasonNumber, sortPriority: queen.regularSeasonNumber}
+  }
+  return allStars
+}
+
+DataParser.prototype.missCongenialityVsAllStarsPlace = function(allStars, groupingCode) {
+  for (var i = 0; i < allStars.length; i++) {
+    var queen = allStars[i]
+    if (queen.allStarsPlace == 1) {
+      queen.rightBucket = {bucket:"All Stars Winner", sortPriority: "3"}
+    } else if (queen.allStarsPlace <= 4) {
+      queen.rightBucket = {bucket:"All Stars Runner-Up", sortPriority: "4"}
+    } else if (queen.allStarsPlace > 7) {
+      queen.rightBucket = {bucket:"All Stars Bottom Half", sortPriority: "6"}
     } else {
-      queen.regularPlaceBucket = {bucket:"Original Season Top Half", sortPriority: "3"}
+      queen.rightBucket = {bucket:"All Stars Top Half", sortPriority: "5"}
+    }
+    if (queen.missCongeniality === true) {
+      queen.leftBucket = {bucket:"Miss Congeniality in Original Season", sortPriority: "1"}
+    } else {
+      queen.leftBucket = {bucket:"not Miss Congeniality", sortPriority: "2"}
     }
   }
   return allStars
 }
+
+DataParser.prototype.regSeasonPlaceVsAllStarsPlace = function(allStars) {
+  for (var i = 0; i < allStars.length; i++) {
+    var queen = allStars[i]
+    if (queen.allStarsPlace == 1) {
+      queen.rightBucket = {bucket:"All Stars Winner", sortPriority: "5"}
+    } else if (queen.allStarsPlace <= 4) {
+      queen.rightBucket = {bucket:"All Stars Runner-Up", sortPriority: "6"}
+    } else if (queen.allStarsPlace > 7) {
+      queen.rightBucket = {bucket:"All Stars Bottom Half", sortPriority: "8"}
+    } else {
+      queen.rightBucket = {bucket:"All Stars Top Half", sortPriority: "7"}
+    }
+    if (queen.regularSeasonPlace == 1) {
+      queen.leftBucket = {bucket:"Original Season Winner", sortPriority: "1"}
+    } else if (queen.regularSeasonPlace <= 4) {
+      queen.leftBucket = {bucket:"Original Season Runner-Up", sortPriority: "2"}
+    } else if (queen.regularSeasonPlace > 7) {
+      queen.leftBucket = {bucket:"Original Season Bottom Half", sortPriority: "4"}
+    } else {
+      queen.leftBucket = {bucket:"Original Season Top Half", sortPriority: "3"}
+    }
+  }
+  return allStars
+}
+
 
 DataParser.prototype.nodeBuilder = function(allStars) {
   var buckets = []
   var nodes = []
   for (var i = 0; i < allStars.length; i++) {
     var queen = allStars[i]
-    buckets.push(queen.regularPlaceBucket)
-    buckets.push(queen.allStarsPlaceBucket)
+    buckets.push(queen.leftBucket)
+    buckets.push(queen.rightBucket)
   }
   function getUnique(arr, comp) {
     const unique = arr
@@ -199,9 +240,9 @@ DataParser.prototype.linkBuilder = function(allStars, nodes) {
     for (var j = 0; j < nodes.length; j++) {
       var node = nodes[j]
       var bucketName = node.name
-      if (queen.regularPlaceBucket.bucket === bucketName) {
+      if (queen.leftBucket.bucket === bucketName) {
         queen.source = j
-      } else if (queen.allStarsPlaceBucket.bucket ===  bucketName) {
+      } else if (queen.rightBucket.bucket ===  bucketName) {
         queen.target = j
       }
     }
@@ -222,7 +263,7 @@ DataParser.prototype.linkBuilder = function(allStars, nodes) {
 }
 
 
-DataParser.prototype.nodeToLinkMerger = function(links, nodes, seasonNumber) {
+DataParser.prototype.nodeToLinkMerger = function(links, nodes, groupingCode) {
   var formattedJSON = {
     "nodes":nodes,
     "links":links
